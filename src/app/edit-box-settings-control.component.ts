@@ -1,51 +1,36 @@
-import { Component, Directive, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { EditBoxSettingsControl } from './models';
-
-@Directive()
-export abstract class BaseControlComponent
- implements OnInit {
-	@Input()
-	control: FormControl;
-
-	@Input()
-	truncate = false;
-
-	private _initialValue: any;
-
-	ngOnInit(): void {
-		this._initialValue = this.control.value;
-	}
-
-	get changesMade(): boolean {
-		return this._initialValue !== this.control.value;
-	}
-}
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {EditBoxSettingsControl} from './models';
+import { BaseControlComponent } from './base-control.component';
 
 @Component({
-  selector: 'app-edit-box-settings-control',
-  standalone: true,
-  template: `<div>EditBox: {{settingsControl.DisplayName }} </div>	<input matInput [formControl]="control"	/>`
+    selector: 'app-edit-box-settings-control',
+    standalone: true,
+    imports: [
+        ReactiveFormsModule
+    ],
+    template: `
+        <div>EditBox: {{ settingsControl.DisplayName }}</div>    <input [formControl]="control"/>`
 })
-export class EditBoxSettingsControlComponent  extends BaseControlComponent implements OnInit, OnDestroy {
+export class EditBoxSettingsControlComponent extends BaseControlComponent implements OnInit, OnDestroy {
 
-	@Input() settingsControl: EditBoxSettingsControl = new EditBoxSettingsControl();
+    @Input() settingsControl: EditBoxSettingsControl = new EditBoxSettingsControl();
 
-	private _valueChangesSub: Subscription = new Subscription();
+    private _valueChangesSub: Subscription = new Subscription();
 
-	override ngOnInit(): void {
-		super.ngOnInit();
-		if (this.control && this._valueChangesSub) {
-			this._valueChangesSub = this.control.valueChanges.subscribe(val => {
-				this.settingsControl.Value = val;
-			});
-		}
-	}
+    override ngOnInit(): void {
+        super.ngOnInit();
+        if (this.control && this._valueChangesSub) {
+            this._valueChangesSub = this.control.valueChanges.subscribe(val => {
+                this.settingsControl.Value = val;
+            });
+        }
+    }
 
-	ngOnDestroy(): void {
-		if (this._valueChangesSub) {
-			this._valueChangesSub.unsubscribe();
-		}
-	}
+    ngOnDestroy(): void {
+        if (this._valueChangesSub) {
+            this._valueChangesSub.unsubscribe();
+        }
+    }
 }
