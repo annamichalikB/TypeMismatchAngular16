@@ -28,8 +28,7 @@ import {MatIconModule} from "@angular/material/icon";
             </mat-checkbox>
         </mat-form-field>
 
-        <button mat-stroked-button (click)="undoChanges()" [disabled]="!changesMade"
-                [matTooltip]="'Undo'">
+        <button class="" mat-stroked-button (click)="undoChanges()" [disabled]="!changesMade">
             <mat-icon>undo</mat-icon>
         </button>`
 })
