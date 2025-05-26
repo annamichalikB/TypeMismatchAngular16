@@ -1,16 +1,27 @@
 <div class="row">
     <div class="col-md-12">
         <form [formGroup]="formGroup">
-            <div class="col-md-6 p-top10" style="font-size: medium">
-                <app-edit-box-settings-control
-                        [settingsControl]="getSettingsControl(0, 0)"
-                        [control]="testControl">
-                </app-edit-box-settings-control>
-                <app-checkbox-settings-control
-                        [settingsControl]="getSettingsControl(0, 1)"
-                        [control]="checkBoxControl">
-                </app-checkbox-settings-control>
-            </div>
+            <mat-horizontal-stepper formArrayName="formArray" #stepper>
+                <mat-step [formGroupName]="step" *ngFor="let ary of formArray.controls; let step = index">
+                    <ng-template matStepLabel>Step {{ step + 1 }}</ng-template>
+                    <div class="col-md-6" *ngFor="let ctrl of ary.controls; let child = index">
+                        <ng-container [ngSwitch]="getControlType(step, child)">
+                            <div *ngSwitchCase="SettingsPageControlType.EditBox">
+                                <app-edit-box-settings-control
+                                        [settingsControl]="getSettingsControl(step, child)"
+                                        [control]="ctrl">
+                                </app-edit-box-settings-control>
+                            </div>
+                            <div *ngSwitchCase="SettingsPageControlType.Checkbox" class="p-top15">
+                                <app-checkbox-settings-control
+                                        [settingsControl]="getSettingsControl(step, child)"
+                                        [control]="ctrl">
+                                </app-checkbox-settings-control>
+                            </div>
+                        </ng-container>
+                    </div>
+                </mat-step>
+            </mat-horizontal-stepper>
         </form>
     </div>
 </div>
