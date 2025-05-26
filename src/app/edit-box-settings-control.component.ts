@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {ReactiveFormsModule} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {EditBoxSettingsControl} from './models';
-import { BaseControlComponent } from './base-control.component';
+import {BaseControlComponent} from './base-control.component';
 
 @Component({
     selector: 'app-edit-box-settings-control',

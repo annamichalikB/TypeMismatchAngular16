@@ -16,5 +16,11 @@ export enum SettingsPageControlType {
  */
 export class EditBoxSettingsControl extends SettingsPageControl {
     Type: SettingsPageControlType = SettingsPageControlType.EditBox;
-   
+}
+
+/**
+ * Checkbox Settings Control
+ */
+export class CheckboxSettingsControl extends SettingsPageControl {
+    Type: SettingsPageControlType = SettingsPageControlType.Checkbox;
 }
