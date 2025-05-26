@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {EditBoxSettingsControl, SettingsPageControl, SettingsPageControlType} from "./models";
-import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormArray, FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {EditBoxSettingsControlComponent} from "./edit-box-settings-control.component";
 
 @Component({
