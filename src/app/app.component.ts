@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {CheckboxSettingsControl, EditBoxSettingsControl, SettingsPageControl, SettingsPageControlType} from "./models";
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {EditBoxSettingsControlComponent} from "./edit-box-settings-control.component";
 import {CheckboxSettingsControlComponent} from "./checkbox-settings-control.component";
 import {MatStepper, MatStepperModule} from "@angular/material/stepper";
 import {CommonModule} from "@angular/common";
+import {DynamicSettingsFormUtilitiesService} from "./dynamic-settings-form-utilities.service";
 
 @Component({
     selector: 'app-root',
@@ -19,18 +20,14 @@ import {CommonModule} from "@angular/common";
     ],
     styles: []
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
     @ViewChild('stepper') stepper: MatStepper;
     formGroup: FormGroup;
     formArray: FormArray;
-    testControl = this._formBuilder.control('test', []);
-    checkBoxControl = this._formBuilder.control(true);
     settingControlsArray: SettingsPageControl[][] = [];
+    formReady = false;
 
-    constructor(private _formBuilder: FormBuilder) {
-    }
-
-    ngOnInit(): void {
+    constructor(private _formBuilder: FormBuilder, private readonly _utilities: DynamicSettingsFormUtilitiesService) {
         this.initialData();
     }
 
@@ -43,12 +40,7 @@ export class AppComponent implements OnInit {
     }
 
     private initialData() {
-        this.formGroup = this._formBuilder.group({
-            formArray: this._formBuilder.array([
-                this._formBuilder.array([this.testControl, this.checkBoxControl])
-            ])
-        });
-        this.formArray = this.formGroup.get('formArray') as FormArray;
+
         const ctrl: EditBoxSettingsControl = {
             Type: SettingsPageControlType.EditBox,
             DisplayName: 'Edit example ',
@@ -61,15 +53,19 @@ export class AppComponent implements OnInit {
             Description: ['For dynamically create a checkbox'],
             Value: 'false'
         }
-        const firstStep = 0;
-        /*   let ary: FormArray = this._formBuilder.array([]);
-           ary.push(this.testControl);
-           ary.push(this.checkBoxControl);
-           (this.formArray.controls[firstStep] as FormArray).push(ary);*/
+        this.formGroup = this._formBuilder.group({
+            formArray: this._formBuilder.array([
+                this._formBuilder.array([this._utilities.getFormControl(ctrl),
+                    this._utilities.getFormControl(chBox)])
+            ])
+        });
 
+        this.formArray = this.formGroup.get('formArray') as FormArray;
+        const firstStep = 0;
         this.settingControlsArray[firstStep] = [];
         this.settingControlsArray[firstStep][0] = ctrl;
         this.settingControlsArray[firstStep][1] = chBox;
+        this.formReady = true;
     }
 
 
