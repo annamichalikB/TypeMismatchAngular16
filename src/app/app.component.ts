@@ -1,12 +1,12 @@
 import {Component, ViewChild} from '@angular/core';
 import {CheckboxSettingsControl, EditBoxSettingsControl, SettingsPageControl, SettingsPageControlType} from "./models";
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {EditBoxSettingsControlComponent} from "./edit-box-settings-control.component";
 import {CheckboxSettingsControlComponent} from "./checkbox-settings-control.component";
 import {MatStepper, MatStepperModule} from "@angular/material/stepper";
 import {CommonModule} from "@angular/common";
 import {DynamicSettingsFormUtilitiesService} from "./dynamic-settings-form-utilities.service";
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
@@ -28,7 +28,9 @@ export class AppComponent {
     formArray: FormArray;
     settingControlsArray: SettingsPageControl[][] = [];
 
-    constructor(private _formBuilder: FormBuilder, private readonly _utilities: DynamicSettingsFormUtilitiesService, private http: HttpClient) {
+    constructor(private _formBuilder: FormBuilder,
+                private readonly _utilities: DynamicSettingsFormUtilitiesService,
+                private http: HttpClient) {
         this.loadSettingsControls();
     }
 
@@ -41,29 +43,21 @@ export class AppComponent {
     }
 
     private loadSettingsControls() {
-        this.http.get<any[]>('assets/settings-controls.json').subscribe(data => {
-            this.createFormFromJson(data);
-        });
+        this.http.get<SettingsPageControl[]>('assets/settings-controls.json')
+            .subscribe((data: SettingsPageControl[]) => {
+                this.createFormFromJson(data);
+            });
     }
 
-    private createFormFromJson(data: any[]) {
+    private createFormFromJson(data: SettingsPageControl[]) {
         this.settingControlsArray = [];
         const formArraySteps: FormArray[] = [];
         let step = 0;
         let controlsForStep: SettingsPageControl[] = [];
-        let formControlsForStep: any[] = [];
+        let formControlsForStep: FormControl[] = [];
         data.forEach((item, idx) => {
-            if (item.Type === SettingsPageControlType.EditBox) {
-                const ctrl = new EditBoxSettingsControl();
-                Object.assign(ctrl, item);
-                controlsForStep.push(ctrl);
-                formControlsForStep.push(this._utilities.getFormControl(ctrl));
-            } else if (item.Type === SettingsPageControlType.Checkbox) {
-                const ctrl = new CheckboxSettingsControl();
-                Object.assign(ctrl, item);
-                controlsForStep.push(ctrl);
-                formControlsForStep.push(this._utilities.getFormControl(ctrl));
-            }
+            controlsForStep.push(item);
+            formControlsForStep.push(this._utilities.getFormControl(item));
             // Example: start new step after 2 controls (customize as needed)
             if ((idx + 1) % 2 === 0 || idx === data.length - 1) {
                 this.settingControlsArray[step] = controlsForStep;
