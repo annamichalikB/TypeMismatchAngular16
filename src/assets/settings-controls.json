@@ -1,26 +1,36 @@
 [
-  {
-    "Type": 0,
-    "DisplayName": "Edit example ",
-    "Description": [
-      "Unique edit box control"
-    ],
-    "Value": "test"
-  },
-  {
-    "Type": 1,
-    "DisplayName": "Check box example ",
-    "Description": [
-      "Dynamically create a checkbox"
-    ],
-    "Value": "false"
-  },
-  {
-    "Type": 1,
-    "DisplayName": "Check box 2 ",
-    "Description": [
-      "Dynamically 2"
-    ],
-    "Value": "true"
-  }
+	{
+		"Type": 0,
+		"DisplayName": "Edit example ",
+		"Description": [
+			"Unique edit box control"
+		],
+		"Value": "test",
+		"IsNumeric": false
+	},
+	{
+		"Type": 1,
+		"DisplayName": "Check box example ",
+		"Description": [
+			"Dynamically create a checkbox"
+		],
+		"Value": "false"
+	},
+	{
+		"Type": 1,
+		"DisplayName": "Check box 2 ",
+		"Description": [
+			"Dynamically 2"
+		],
+		"Value": "true"
+	},
+	{
+		"Type": 0,
+		"DisplayName": "Edit numeric",
+		"Description": [
+			"Unique numeric"
+		],
+		"Value": "2",
+		"IsNumeric": true
+	}
 ]

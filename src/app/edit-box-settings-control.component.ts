@@ -11,7 +11,8 @@ import { BaseControlComponent } from './base-control.component';
 		ReactiveFormsModule
 	],
 	template: `
-		<div>EditBox: {{ settingsControl.DisplayName }}</div>    <input [formControl]="control"/>`
+		<div>EditBox: {{ settingsControl.DisplayName }}</div>    <input [formControl]="control"/>
+		<div>Is numeric: {{ settingsControl.IsNumeric }}</div> `
 })
 export class EditBoxSettingsControlComponent extends BaseControlComponent implements OnInit, OnDestroy {
 
