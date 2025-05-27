@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {CheckboxSettingsControl, EditBoxSettingsControl, SettingsPageControl, SettingsPageControlType} from "./models";
+import {SettingsPageControl, SettingsPageControlType} from "./models";
 import {FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {EditBoxSettingsControlComponent} from "./edit-box-settings-control.component";
 import {CheckboxSettingsControlComponent} from "./checkbox-settings-control.component";
