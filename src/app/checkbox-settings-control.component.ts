@@ -21,9 +21,9 @@ import {MatIconModule} from "@angular/material/icon";
     template: `
         <mat-form-field class="w-100">
             <input matInput style="display: none;"/>
-            <mat-checkbox
-                    color="primary"
-                    [formControl]="control">
+            <mat-checkbox [matTooltip]="settingsControl.Description[0]"
+                          color="primary"
+                          [formControl]="control">
                 <mat-label>{{ settingsControl.DisplayName }}</mat-label>
             </mat-checkbox>
         </mat-form-field>

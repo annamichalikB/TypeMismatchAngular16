@@ -4,7 +4,7 @@
             <mat-horizontal-stepper formArrayName="formArray" #stepper>
                 <mat-step [formGroupName]="step" *ngFor="let ary of formArray.controls; let step = index">
                     <ng-template matStepLabel>Step {{ step + 1 }}</ng-template>
-                    <div class="col-md-6" *ngFor="let ctrl of ary .controls ; let child = index">
+                    <div class="col-md-6" *ngFor="let ctrl of ary.controls ; let child = index">
                         <ng-container [ngSwitch]="getControlType(step, child)">
                             <div *ngSwitchCase="SettingsPageControlType.EditBox">
                                 <app-edit-box-settings-control
