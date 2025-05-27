@@ -7,17 +7,19 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatInputModule} from "@angular/material/input";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatIconModule} from "@angular/material/icon";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'app-checkbox-settings-control',
     standalone: true,
-    imports: [
-        ReactiveFormsModule,
-        MatCheckboxModule,
-        MatInputModule,
-        MatTooltipModule,
-        MatIconModule
-    ],
+	imports: [
+		ReactiveFormsModule,
+		MatCheckboxModule,
+		MatInputModule,
+		MatTooltipModule,
+		MatIconModule,
+		MatButtonModule
+	],
     template: `
         <mat-form-field class="w-100">
             <input matInput style="display: none;"/>
