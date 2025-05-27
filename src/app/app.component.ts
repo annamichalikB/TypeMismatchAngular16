@@ -6,6 +6,7 @@ import {CheckboxSettingsControlComponent} from "./checkbox-settings-control.comp
 import {MatStepper, MatStepperModule} from "@angular/material/stepper";
 import {CommonModule} from "@angular/common";
 import {DynamicSettingsFormUtilitiesService} from "./dynamic-settings-form-utilities.service";
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +17,8 @@ import {DynamicSettingsFormUtilitiesService} from "./dynamic-settings-form-utili
         ReactiveFormsModule,
         MatStepperModule,
         CheckboxSettingsControlComponent,
-        CommonModule
+        CommonModule,
+        HttpClientModule
     ],
     styles: []
 })
@@ -25,10 +27,9 @@ export class AppComponent {
     formGroup: FormGroup;
     formArray: FormArray;
     settingControlsArray: SettingsPageControl[][] = [];
-    formReady = false;
 
-    constructor(private _formBuilder: FormBuilder, private readonly _utilities: DynamicSettingsFormUtilitiesService) {
-        this.initialData();
+    constructor(private _formBuilder: FormBuilder, private readonly _utilities: DynamicSettingsFormUtilitiesService, private http: HttpClient) {
+        this.loadSettingsControls();
     }
 
     getSettingsControl(step: number, ctrlNum: number): SettingsPageControl {
@@ -39,33 +40,43 @@ export class AppComponent {
         return this.settingControlsArray[step][ctrlNum].Type;
     }
 
-    private initialData() {
-
-        const ctrl: EditBoxSettingsControl = {
-            Type: SettingsPageControlType.EditBox,
-            DisplayName: 'Edit example ',
-            Description: ['Unique edit box control'],
-            Value: ''
-        };
-        const chBox: CheckboxSettingsControl = {
-            Type: SettingsPageControlType.Checkbox,
-            DisplayName: 'Check box example ',
-            Description: ['For dynamically create a checkbox'],
-            Value: 'false'
-        }
-        this.formGroup = this._formBuilder.group({
-            formArray: this._formBuilder.array([
-                this._formBuilder.array([this._utilities.getFormControl(ctrl),
-                    this._utilities.getFormControl(chBox)])
-            ])
+    private loadSettingsControls() {
+        this.http.get<any[]>('assets/settings-controls.json').subscribe(data => {
+            this.createFormFromJson(data);
         });
+    }
 
+    private createFormFromJson(data: any[]) {
+        this.settingControlsArray = [];
+        const formArraySteps: FormArray[] = [];
+        let step = 0;
+        let controlsForStep: SettingsPageControl[] = [];
+        let formControlsForStep: any[] = [];
+        data.forEach((item, idx) => {
+            if (item.Type === SettingsPageControlType.EditBox) {
+                const ctrl = new EditBoxSettingsControl();
+                Object.assign(ctrl, item);
+                controlsForStep.push(ctrl);
+                formControlsForStep.push(this._utilities.getFormControl(ctrl));
+            } else if (item.Type === SettingsPageControlType.Checkbox) {
+                const ctrl = new CheckboxSettingsControl();
+                Object.assign(ctrl, item);
+                controlsForStep.push(ctrl);
+                formControlsForStep.push(this._utilities.getFormControl(ctrl));
+            }
+            // Example: start new step after 2 controls (customize as needed)
+            if ((idx + 1) % 2 === 0 || idx === data.length - 1) {
+                this.settingControlsArray[step] = controlsForStep;
+                formArraySteps.push(this._formBuilder.array(formControlsForStep));
+                step++;
+                controlsForStep = [];
+                formControlsForStep = [];
+            }
+        });
+        this.formGroup = this._formBuilder.group({
+            formArray: this._formBuilder.array(formArraySteps)
+        });
         this.formArray = this.formGroup.get('formArray') as FormArray;
-        const firstStep = 0;
-        this.settingControlsArray[firstStep] = [];
-        this.settingControlsArray[firstStep][0] = ctrl;
-        this.settingControlsArray[firstStep][1] = chBox;
-        this.formReady = true;
     }
 
 

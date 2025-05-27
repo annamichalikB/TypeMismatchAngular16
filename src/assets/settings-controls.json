@@ -1,0 +1,20 @@
+[
+  {
+    "Type": 0,
+    "DisplayName": "Edit example ",
+    "Description": ["Unique edit box control"],
+    "Value": "test"
+  },
+  {
+    "Type": 1,
+    "DisplayName": "Check box example ",
+    "Description": ["For dynamically create a checkbox"],
+    "Value": "false"
+  },
+  {
+    "Type": 1,
+    "DisplayName": "Check box 2 ",
+    "Description": ["For dynamically 2"],
+    "Value": "true"
+  }
+]
